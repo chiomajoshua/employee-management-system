@@ -20,7 +20,7 @@ API documentation is [here](https://{deployedLocation}/swagger) after running th
 - dotnet 6
 
 
-#### Getting Started
+## Getting Started
 
 ##### Prerequisites
 - dotnet 6 SDK needs to be installed on your machine. See [dotnet 6 Docs](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
