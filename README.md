@@ -7,7 +7,7 @@ An organization has hired you to build an employee management system for them. T
     ├── src                                     # Application Source Files.
             ├──app
                     ├── api
-    |                   └── EMS.Data            # ComputeMatrix Web API
+    |                   └── EMS.Data            # Employee Management System Data Layer
     
     ├── .gitignore                              # Git ignore.
     ├── README.md                               # This file.
