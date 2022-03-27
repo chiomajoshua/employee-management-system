@@ -8,6 +8,7 @@ An organization has hired you to build an employee management system for them. T
             ├──app
                     ├── api
     |                   └── EMS.Data            # Employee Management System Data Layer
+                        └── EMS.Core            # Employee Management System Business Logic Layer
     
     ├── .gitignore                              # Git ignore.
     ├── README.md                               # This file.
