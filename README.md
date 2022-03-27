@@ -19,6 +19,15 @@ API documentation is [here](https://{deployedLocation}/swagger) after running th
 #### Technologies Used
 - dotnet 6
 
+## Client Request
+
+### The challenge
+- The application should be able to log admin and employees in and they should be able to perform different tasks.
+- Employees can log in and edit basic info.
+- Each employee has a virtual wallet that the admin pays their salaries into
+- The application assumes the admin's wallet is fully funded.
+- Admin should be able to create users and manage them and pay either single or bulk salaries when needed.
+
 
 ## Getting Started
 
