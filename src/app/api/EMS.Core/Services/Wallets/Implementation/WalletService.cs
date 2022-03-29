@@ -3,12 +3,10 @@
     public class WalletService : IWalletService
     {
         private readonly IRepository _repository;
-        private readonly IEmployeeService _employeeService;
         private readonly IIdentityService _identityService;
-        public WalletService(IRepository repository, IEmployeeService employeeService, IIdentityService identityService)
+        public WalletService(IRepository repository, IIdentityService identityService)
         {
             _repository = repository;
-            _employeeService = employeeService;
             _identityService = identityService;
         }
 
@@ -21,7 +19,7 @@
                 foreach (var item in transactionRequests)
                 {
                     var transactionDate = DateTime.Now;
-                    var employee = await GetEmployee(item.EmployeeId);
+                    var employee = await GetEmployeeWallet(item.EmployeeId);
                     employee.Balance += item.Amount;
                     employee.UpdatedById = Guid.Parse(_identityService.GetUserId());
                     employee.UpdatedAt = transactionDate;
@@ -41,9 +39,9 @@
             }
         }
 
-        public async Task<decimal> GetBalance(string employeeId)
+        public async Task<decimal> GetBalance()
         {
-            var result = await GetEmployee(employeeId);
+            var result = await GetEmployeeWallet(_identityService.GetUserId());
             return result.Balance;
         }       
 
@@ -53,7 +51,7 @@
             try
             {
                 var transactionDate = DateTime.Now;
-                var employee = await GetEmployee(transactionRequest.EmployeeId);
+                var employee = await GetEmployeeWallet(transactionRequest.EmployeeId);
                 employee.Balance += transactionRequest.Amount;
                 employee.UpdatedById = Guid.Parse(_identityService.GetUserId());
                 employee.UpdatedAt = transactionDate;
@@ -71,7 +69,7 @@
             }
         }
 
-        private async Task<Wallet> GetEmployee(string employeeId)
+        private async Task<Wallet> GetEmployeeWallet(string employeeId)
         {
             return await _repository.GetAsync<Wallet>(x => x.Employee.Id == employeeId);
         }

@@ -2,7 +2,7 @@
 {
     public interface IWalletService : IAutoDependencyCore
     {
-        Task<decimal> GetBalance(string employeeId);
+        Task<decimal> GetBalance();
         Task<TransactionResponse> PostPayment(TransactionRequest transactionRequest);
         Task<IEnumerable<TransactionResponse>> BulkPostPayment(List<TransactionRequest> transactionRequests);
     }

@@ -24,6 +24,9 @@
             return new Employee
             {
                 Email = createEmployeeRequest.Email,
+                NormalizedEmail = createEmployeeRequest.Email,
+                NormalizedUserName = createEmployeeRequest.Email,
+                EmailConfirmed = true,
                 FirstName = createEmployeeRequest.FirstName,
                 LastName = createEmployeeRequest.LastName,
                 PhoneNumber = createEmployeeRequest.PhoneNumber,

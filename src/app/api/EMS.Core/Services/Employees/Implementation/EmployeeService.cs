@@ -26,7 +26,7 @@
             throw new Exception("Employee Not Found");
         }
 
-        public async Task<string> CreateEmployeeAsync(CreateEmployeeRequest createEmployeeRequest)
+        public async Task<bool> CreateEmployeeAsync(CreateEmployeeRequest createEmployeeRequest)
         {
             var userId = Guid.Parse(_identityService.GetUserId());
             var employeeRequest = createEmployeeRequest.ToDbEmployee();
@@ -44,9 +44,9 @@
                 await _userManager.AddToRoleAsync(employeeRequest, ApplicationUserRoleName.EmployeeRoleName);
 
             var userProfile = await GetByUserNameAndThrow(createEmployeeRequest.Email);
-            await _repository.InsertAsync(new Wallet { Balance = 0, CreatedById = userId, UpdatedById = userId, Employee = userProfile });
+            await _repository.InsertAsync(new Wallet { Balance = 0, CreatedById = userId, UpdatedById = userId, EmployeeId = userProfile.Id, Employee = userProfile });
 
-            return userProfile.EmployeeId;
+            return true;
         }
 
         public async Task<Employee> FindDbEmployeeByEmailAsync(string emailAddress)
@@ -75,7 +75,19 @@
 
         public async Task<bool> LockAsync(string userName) => await SetEnabled(userName, false);
 
-        public async Task<bool> UnlockAsync(string userName) => await SetEnabled(userName, true);
+        public async Task<bool> UnlockAsync(string userName) => await SetEnabled(userName, true);        
+
+        public async Task<Employee> FindDbEmployeeByIdAsync(string id)
+        {
+            if (string.IsNullOrEmpty(id)) throw new Exception("Employee Not Found");
+            return await _userManager.FindByIdAsync(id) ?? null;
+        }
+
+        public async Task<bool> IsEmployeeExistsAsync(string emailAddress)
+        {
+            return await _repository.ExistsAsync<Employee>(x => x.Email == emailAddress);
+        }
+
 
         private async Task<bool> SetEnabled(string userName, bool enabled)
         {
@@ -95,11 +107,5 @@
         }
 
         private async Task<IEnumerable<string>> GetEmployeeRole(Employee employee) => await _userManager.GetRolesAsync(employee);
-
-        public async Task<Employee> FindDbEmployeeByIdAsync(string id)
-        {
-            if (string.IsNullOrEmpty(id)) throw new Exception("Employee Not Found");
-            return await _userManager.FindByIdAsync(id) ?? null;
-        }
     }
 }

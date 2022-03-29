@@ -18,7 +18,7 @@ namespace EMS.Data.Persistence
             builder.Entity<Wallet>()
                         .HasOne(ad => ad.Employee)
                         .WithOne(s => s.Wallet)
-                        .HasForeignKey<Wallet>(ad => ad.Employee.Id);
+                        .HasForeignKey<Wallet>(ad => ad.EmployeeId);
 
         }
 

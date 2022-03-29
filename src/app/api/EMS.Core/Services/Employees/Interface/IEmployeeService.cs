@@ -7,7 +7,7 @@
         /// </summary>
         /// <param name="createEmployeeRequest"></param>
         /// <returns></returns>
-        Task<string> CreateEmployeeAsync(CreateEmployeeRequest createEmployeeRequest);
+        Task<bool> CreateEmployeeAsync(CreateEmployeeRequest createEmployeeRequest);
 
         /// <summary>
         /// Find employee by email 
@@ -58,5 +58,12 @@
         /// <param name="emailAddress"></param>
         /// <returns></returns>
         Task<Employee> FindDbEmployeeByIdAsync(string id);
+
+        /// <summary>
+        /// Check If Employee Email Is Already In The Database
+        /// </summary>
+        /// <param name="emailAddress"></param>
+        /// <returns></returns>
+        Task<bool> IsEmployeeExistsAsync(string emailAddress);
     }
 }
