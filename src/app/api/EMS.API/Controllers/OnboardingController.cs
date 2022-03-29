@@ -1,6 +1,6 @@
 ﻿namespace EMS.API.Controllers
 {
-    [Authorize(Roles = ApplicationUserRoleName.AdminRoleName)]
+    //[Authorize(Roles = ApplicationUserRoleName.AdminRoleName)]
     [Route("api/[controller]")]
     [ApiController]
     public class OnboardingController : ControllerBase

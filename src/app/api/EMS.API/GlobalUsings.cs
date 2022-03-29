@@ -24,3 +24,4 @@ global using EMS.Data.Constants;
 global using Microsoft.AspNetCore.Authorization;
 global using EMS.Core.Services.Wallets.Interface;
 global using EMS.Data.Models.Wallet;
+global using EMS.Core;
