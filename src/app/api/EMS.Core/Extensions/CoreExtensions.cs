@@ -4,7 +4,7 @@
     {
         public static IServiceCollection RegisterGenericRepository(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddGenericRepository<RestaurantContext>();
+            serviceCollection.AddGenericRepository<EMSContext>();
             return serviceCollection;
         }
     }
