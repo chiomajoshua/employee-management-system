@@ -6,13 +6,16 @@
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IRepository _repository;
         private readonly IIdentityService _identityService;
+        private readonly IWalletService _walletService;
         
-        public EmployeeService(UserManager<Employee> userManager, RoleManager<IdentityRole> roleManager, IRepository repository, IIdentityService identityService)
+        public EmployeeService(UserManager<Employee> userManager, RoleManager<IdentityRole> roleManager, IRepository repository, IIdentityService identityService,
+                               IWalletService walletService)
         {
             _userManager = userManager;
             _repository = repository;
             _identityService = identityService;
             _roleManager = roleManager;
+            _walletService = walletService;
         }
 
         public async Task<bool> ChangePasswordAsync(string userName, UpdatePasswordRequest updateUserRequest)
@@ -67,7 +70,10 @@
             if (string.IsNullOrWhiteSpace(emailAddress)) throw new Exception("Employee Not Found");
             var isUserExist = await _userManager.FindByEmailAsync(emailAddress);
             if (isUserExist != null)
+            {
+                isUserExist.Wallet = await _walletService.GetEmployeeWallet(isUserExist.Id);
                 return isUserExist.ToEmployee(await GetEmployeeRole(isUserExist));
+            }
             return null;
         }
 
@@ -91,6 +97,15 @@
         {
             return await _repository.ExistsAsync<Employee>(x => x.Email == emailAddress);
         }
+
+        public async Task<IEnumerable<Employee>> GetEmployees(int skip, int take)
+        {
+            var result = await _repository.GetListAsync(GetSpecification(skip, take));
+            return (IEnumerable<Employee>)result.ToEmployeeList();
+        }
+
+
+        #region privateMethods
 
 
         private async Task<bool> SetEnabled(string userName, bool enabled)
@@ -119,5 +134,19 @@
             if (!await _roleManager.RoleExistsAsync(ApplicationUserRoleName.EmployeeRoleName))
                 await _roleManager.CreateAsync(new IdentityRole(ApplicationUserRoleName.EmployeeRoleName));
         }
+
+        private static Specification<Employee> GetSpecification(int skip, int take)
+        {
+            var specification = new Specification<Employee>();
+            specification.Includes = query => query.Include(e => e.Wallet);
+
+            specification.Skip = skip;
+            specification.Take = take;
+            return specification;
+        }
+
+        #endregion
+
+
     }
 }

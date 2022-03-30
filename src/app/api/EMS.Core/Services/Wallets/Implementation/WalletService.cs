@@ -69,9 +69,6 @@
             }
         }
 
-        private async Task<Wallet> GetEmployeeWallet(string employeeId)
-        {
-            return await _repository.GetAsync<Wallet>(x => x.Employee.Id == employeeId);
-        }
+        public async Task<Wallet> GetEmployeeWallet(string employeeId) => await _repository.GetAsync<Wallet>(x => x.Employee.Id == employeeId);
     }
 }

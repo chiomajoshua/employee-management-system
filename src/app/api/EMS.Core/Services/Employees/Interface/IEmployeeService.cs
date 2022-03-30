@@ -65,5 +65,13 @@
         /// <param name="emailAddress"></param>
         /// <returns></returns>
         Task<bool> IsEmployeeExistsAsync(string emailAddress);
+
+        /// <summary>
+        /// Get All Employees
+        /// </summary>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
+        /// <returns></returns>
+        Task<IEnumerable<Employee>> GetEmployees(int skip, int take);
     }
 }

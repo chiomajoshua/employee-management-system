@@ -15,7 +15,8 @@
                 Gender = employee.Gender,
                 DateOfBirth = employee.DateOfBirth,
                 Id = employee.Id,
-                Roles = roles
+                Roles = roles,
+                Balance = employee.Wallet.Balance
             };
         }
 
@@ -39,6 +40,25 @@
                 Salary = createEmployeeRequest.Salary,
                 DepartmentId = createEmployeeRequest.DepartmentId
             };
+        }
+
+        public static IEnumerable<EmployeeResponse> ToEmployeeList(this List<Employee> employeeData)
+        {
+            var result = new List<EmployeeResponse>();
+            result.AddRange(employeeData.Select(employee => new EmployeeResponse()
+            {
+                IsBlocked = employee.Enabled,
+                Email = employee.Email,
+                FirstName = employee.FirstName,
+                Phone = employee.PhoneNumber,
+                LastName = employee.LastName,
+                Name = employee.ToString(),
+                Gender = employee.Gender,
+                DateOfBirth = employee.DateOfBirth,
+                Id = employee.Id,
+                Balance = employee.Wallet.Balance
+            }));
+            return result;
         }
     }
 }
