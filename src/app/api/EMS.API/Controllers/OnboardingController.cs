@@ -36,7 +36,7 @@
         public async Task<IActionResult> Put(UpdateEmployeeRequest updateEmployeeRequest)
         {
             var employeeResult = await _employeeService.IsEmployeeExistsAsync(updateEmployeeRequest.EmailAddress);
-            if (!employeeResult) return Conflict("Employee Information Not Found");
+            if (!employeeResult) return NotFound("Employee Information Not Found");
 
             if (await _employeeService.UpdateEmployeeInformation(updateEmployeeRequest)) return Ok();
 
