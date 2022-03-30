@@ -9,6 +9,7 @@ An organization has hired you to build an employee management system for them. T
                     ├── api
     |                   └── EMS.Data            # Employee Management System Data Layer
                         └── EMS.Core            # Employee Management System Business Logic Layer
+                        └── EMS.API             # Employee Management System API
     
     ├── .gitignore                              # Git ignore.
     ├── README.md                               # This file.
@@ -46,3 +47,7 @@ API documentation is [here](https://{deployedLocation}/swagger) after running th
 - Open project with visual studio
 - If Nugets do not restore automatically, right-click on the solution folder and select Restore Nuget Packages
 - Build and Run the project.
+
+
+##### Todos
+- Include Unit Tests
