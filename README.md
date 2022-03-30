@@ -10,7 +10,8 @@ An organization has hired you to build an employee management system for them. T
     |                   └── EMS.Data            # Employee Management System Data Layer
                         └── EMS.Core            # Employee Management System Business Logic Layer
                         └── EMS.API             # Employee Management System API
-    
+                    ├── tests
+                        └── EMS.Core.Tests      # Employee Management System Business Logic Layer Tests
     ├── .gitignore                              # Git ignore.
     ├── README.md                               # This file.
     
