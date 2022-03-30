@@ -51,3 +51,4 @@ API documentation is [here](https://{deployedLocation}/swagger) after running th
 
 ##### Todos
 - Include Unit Tests
+- Add Audit Logs(Especially for Transactions)
