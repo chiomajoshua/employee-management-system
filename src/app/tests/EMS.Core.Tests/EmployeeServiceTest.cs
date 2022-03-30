@@ -1,10 +1,4 @@
-﻿
-
-using EMS.Data.Models.Employee;
-using FluentAssertions;
-using System;
-
-namespace EMS.Core.Tests
+﻿namespace EMS.Core.Tests
 {
     public class EmployeeServiceTest
     {

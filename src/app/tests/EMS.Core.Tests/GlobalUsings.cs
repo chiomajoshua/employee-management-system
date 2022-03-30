@@ -7,3 +7,5 @@ global using Moq;
 global using System.Threading.Tasks;
 global using TanvirArjel.EFCore.GenericRepository;
 global using Xunit;
+global using EMS.Data.Models.Employee;
+global using FluentAssertions;
