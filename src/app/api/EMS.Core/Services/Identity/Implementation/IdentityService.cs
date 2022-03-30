@@ -5,10 +5,11 @@
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<Employee> _userManager;
         private readonly IConfiguration _configuration;
-        public IdentityService(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
+        public IdentityService(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, UserManager<Employee> userManager)
         {
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
+            _userManager = userManager;
         }
 
         public async Task<TokenResponse> CreateToken(string emailAddress)
@@ -19,9 +20,9 @@
             var authClaims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, employeeDetails.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, employeeDetails.Id),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Sid, employeeDetails.Id)
                 };
-
             authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JWT:Secret")));
 
@@ -44,7 +45,8 @@
             return !string.IsNullOrEmpty(userId.Value) ? userId.Value : throw new Exception("User Id Not Found");
         }
 
-        public async Task<bool> Login(LoginRequest loginRequest) => 
-             await _userManager.CheckPasswordAsync(await _userManager.FindByEmailAsync(loginRequest.Email), loginRequest.Password);
+        public async Task<bool> Login(LoginRequest loginRequest)
+            => await _userManager.CheckPasswordAsync(await _userManager.FindByEmailAsync(loginRequest.Email), loginRequest.Password);
+        
     }
 }

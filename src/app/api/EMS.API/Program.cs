@@ -19,6 +19,8 @@ try
     builder.Services.RegisterDatabaseService(builder.Configuration);
     builder.Services.RegisterGenericRepository();
 
+    builder.Services.AddHttpContextAccessor();
+
     builder.Services.AddResponseCaching();
     builder.Services.AddCors(options =>
     {
@@ -69,7 +71,9 @@ try
     app.UseHttpsRedirection();
     app.UseResponseCaching();
 
+    app.UseAuthentication();
     app.UseAuthorization();
+    
 
     app.UseEndpoints(endpoints =>
     {

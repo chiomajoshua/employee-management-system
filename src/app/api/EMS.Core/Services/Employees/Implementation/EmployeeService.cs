@@ -3,14 +3,16 @@
     public class EmployeeService : IEmployeeService
     {
         private readonly UserManager<Employee> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IRepository _repository;
         private readonly IIdentityService _identityService;
         
-        public EmployeeService(UserManager<Employee> userManager, IRepository repository, IIdentityService identityService)
+        public EmployeeService(UserManager<Employee> userManager, RoleManager<IdentityRole> roleManager, IRepository repository, IIdentityService identityService)
         {
             _userManager = userManager;
             _repository = repository;
             _identityService = identityService;
+            _roleManager = roleManager;
         }
 
         public async Task<bool> ChangePasswordAsync(string userName, UpdatePasswordRequest updateUserRequest)
@@ -36,7 +38,9 @@
                 if (result.Errors.Any(x => x.Code == "DuplicateUserName"))
                     throw new Exception("DuplicateUserName");
                 throw new Exception(result.Errors.FirstOrDefault().Description);
-            }     
+            }
+
+            await AddRoles();
 
             if (createEmployeeRequest.IsAdmin)
                 await _userManager.AddToRoleAsync(employeeRequest, ApplicationUserRoleName.AdminRoleName);
@@ -44,7 +48,7 @@
                 await _userManager.AddToRoleAsync(employeeRequest, ApplicationUserRoleName.EmployeeRoleName);
 
             var userProfile = await GetByUserNameAndThrow(createEmployeeRequest.Email);
-            await _repository.InsertAsync(new Wallet { Balance = 0, CreatedById = userId, UpdatedById = userId, EmployeeId = userProfile.Id, Employee = userProfile });
+            await _repository.InsertAsync(new Wallet { Balance = 0, CreatedById = userId, UpdatedById = userId, EmployeeId = userProfile.Id });
 
             return true;
         }
@@ -101,11 +105,19 @@
         {
             if (string.IsNullOrWhiteSpace(userName)) throw new Exception("Employee Not Found");
 
-            var result = _userManager.Users.Include(x => x.Wallet).Include(x => x.Department)
-                                           .FirstOrDefault(x => x.UserName == userName);
+            var result = _userManager.Users.Include(x => x.Wallet).FirstOrDefault(x => x.UserName == userName);
             return result == null ? throw new Exception("Employee Not Found") : await Task.FromResult(result);
         }
 
         private async Task<IEnumerable<string>> GetEmployeeRole(Employee employee) => await _userManager.GetRolesAsync(employee);
+
+        private async Task AddRoles()
+        {
+            if (!await _roleManager.RoleExistsAsync(ApplicationUserRoleName.AdminRoleName))
+                await _roleManager.CreateAsync(new IdentityRole(ApplicationUserRoleName.AdminRoleName));
+
+            if (!await _roleManager.RoleExistsAsync(ApplicationUserRoleName.EmployeeRoleName))
+                await _roleManager.CreateAsync(new IdentityRole(ApplicationUserRoleName.EmployeeRoleName));
+        }
     }
 }

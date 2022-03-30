@@ -1,6 +1,6 @@
 ﻿namespace EMS.API.Controllers
 {
-    //[Authorize(Roles = ApplicationUserRoleName.AdminRoleName)]
+    [Authorize(Roles = ApplicationUserRoleName.AdminRoleName)]
     [Route("api/[controller]")]
     [ApiController]
     public class OnboardingController : ControllerBase
@@ -19,7 +19,7 @@
         public async Task<IActionResult> Post(CreateEmployeeRequest createEmployeeRequest)
         {
             var employeeResult = await _employeeService.IsEmployeeExistsAsync(createEmployeeRequest.Email);
-            if (employeeResult) return Conflict();
+            if (employeeResult) return Conflict("Employee Email Already Registered");
 
             if (await _employeeService.CreateEmployeeAsync(createEmployeeRequest)) return NoContent();
 
