@@ -44,7 +44,7 @@ namespace EMS.Core.Tests
             response.Should().Be(true);
         }
 
-        [Fact(DisplayName = "Should Return true after changing password")]
+        [Fact(DisplayName = "Should Return false")]
         public async Task EmployeeService_ChangePasswordAsync_Failed()
         {
             var username = "tester@gmail.com";
