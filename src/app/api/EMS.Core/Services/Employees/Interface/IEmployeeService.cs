@@ -73,5 +73,13 @@
         /// <param name="take"></param>
         /// <returns></returns>
         Task<IEnumerable<Employee>> GetEmployees(int skip, int take);
+
+
+        /// <summary>
+        /// Update Employee Information
+        /// </summary>
+        /// <param name="updateEmployeeRequest"></param>
+        /// <returns></returns>
+        Task<bool> UpdateEmployeeInformation(UpdateEmployeeRequest updateEmployeeRequest);
     }
 }

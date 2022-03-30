@@ -56,6 +56,29 @@
             return true;
         }
 
+        public async Task<bool> UpdateEmployeeInformation(UpdateEmployeeRequest updateEmployeeRequest)
+        {
+            IDbContextTransaction transaction = await _repository.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+            try
+            {
+                var employeeInformation = await FindDbEmployeeByIdAsync(_identityService.GetUserId());
+                employeeInformation.FirstName = updateEmployeeRequest.FirstName;
+                employeeInformation.LastName = updateEmployeeRequest.LastName;
+                employeeInformation.Gender = updateEmployeeRequest.Gender;
+                employeeInformation.PhoneNumber = updateEmployeeRequest.PhoneNumber;
+
+                await _repository.UpdateAsync(employeeInformation);               
+                await transaction.CommitAsync();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
         public async Task<Employee> FindDbEmployeeByEmailAsync(string emailAddress)
         {
             if (string.IsNullOrWhiteSpace(emailAddress)) throw new Exception("Employee Not Found");
@@ -137,11 +160,13 @@
 
         private static Specification<Employee> GetSpecification(int skip, int take)
         {
-            var specification = new Specification<Employee>();
-            specification.Includes = query => query.Include(e => e.Wallet);
+            var specification = new Specification<Employee>
+            {
+                Includes = query => query.Include(e => e.Wallet),
 
-            specification.Skip = skip;
-            specification.Take = take;
+                Skip = skip,
+                Take = take
+            };
             return specification;
         }
 
